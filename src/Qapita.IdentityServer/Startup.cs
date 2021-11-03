@@ -1,10 +1,13 @@
 ﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Qapita.IdentityServer.CustomClaimsService;
+using Qapita.IdentityServer.CustomGrants;
 
 namespace Qapita.IdentityServer
 {
@@ -19,9 +22,7 @@ namespace Qapita.IdentityServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // uncomment, if you want to add an MVC-based UI
-            //services.AddControllersWithViews();
-
+            //services.AddTransient<IClaimsService, QapitaClaimsService>();
             var builder = services.AddIdentityServer(options =>
             {
                 // https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
@@ -29,7 +30,8 @@ namespace Qapita.IdentityServer
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients);
+                .AddInMemoryClients(Config.Clients)
+                .AddExtensionGrantValidator<QapitaTenantGrantValidator>();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -39,18 +41,7 @@ namespace Qapita.IdentityServer
                 app.UseDeveloperExceptionPage();
             }
 
-            // uncomment if you want to add MVC
-            //app.UseStaticFiles();
-            //app.UseRouting();
-            
             app.UseIdentityServer();
-
-            // uncomment, if you want to add MVC
-            //app.UseAuthorization();
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapDefaultControllerRoute();
-            //});
         }
     }
 }
