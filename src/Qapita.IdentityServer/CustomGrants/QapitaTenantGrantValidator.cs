@@ -29,7 +29,7 @@ namespace Qapita.IdentityServer.CustomGrants
                 return Task.CompletedTask;
             }
 
-            _logger.LogInformation($"{QapitaClaimTypes.TenantId} received: {tenantId}");
+            _logger.LogInformation("{ClaimName} received: {Value}", QapitaClaimTypes.TenantId, tenantId);
 
             context.Result = new GrantValidationResult("nauman", GrantType,
                 new[]

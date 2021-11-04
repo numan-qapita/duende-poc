@@ -13,21 +13,17 @@ namespace Qapita.IdentityServer.Extensions
         public static IServiceCollection ConfigureQapitaIdP(this IServiceCollection services,
             IConfiguration configuration, IWebHostEnvironment environment)
         {
-            const string connectionString =
-                @"server=localhost;user=root;password=my-secret-pw;database=QapitaIdentityDb";
-            //@"Data Source=localhost;database=QapitaIdentityDb;User Id=SA;Password=Test123!";
+            var connectionString = configuration.GetConnectionString("MySqlConnection");
             var migrationAssemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
+            var mySqlVersion = ServerVersion.AutoDetect(connectionString);
+
             Action<DbContextOptionsBuilder> dbCtxOptBuilder = builder =>
-                //builder.UseSqlServer(connectionString, sql => sql.MigrationsAssembly(migrationAssemblyName));
-                builder.UseMySql(connectionString, new MySqlServerVersion("8.0.27-1debian10"),
+                builder.UseMySql(connectionString, mySqlVersion,
                     mysql => mysql.MigrationsAssembly(migrationAssemblyName));
 
             services.AddIdentityServer()
-                .AddConfigurationStore(o =>
-                {
-                    o.ConfigureDbContext = dbCtxOptBuilder;
-                })
+                .AddConfigurationStore(o => { o.ConfigureDbContext = dbCtxOptBuilder; })
                 .AddOperationalStore(o =>
                 {
                     o.ConfigureDbContext = dbCtxOptBuilder;

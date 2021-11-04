@@ -19,24 +19,14 @@ namespace Qapita.IdentityServer
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
 
-        public Startup(IWebHostEnvironment environment)
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
             Environment = environment;
+            Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddTransient<IClaimsService, QapitaClaimsService>();
-            // var builder = services.AddIdentityServer(options =>
-            // {
-            //     // https://docs.duendesoftware.com/identityserver/v5/fundamentals/resources/
-            //     options.EmitStaticAudienceClaim = true;
-            // })
-            //     .AddInMemoryIdentityResources(Config.IdentityResources)
-            //     .AddInMemoryApiScopes(Config.ApiScopes)
-            //     .AddInMemoryClients(Config.Clients)
-            //     .AddExtensionGrantValidator<QapitaTenantGrantValidator>();
-
             services.ConfigureQapitaIdP(Configuration, Environment);
         }
 

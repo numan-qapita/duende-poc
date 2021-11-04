@@ -31,7 +31,8 @@ namespace Qapita.IdentityServer
                     ClientId = "qapita.qfund.api",
                     AllowedGrantTypes = {"tenant_delegation",},
                     ClientSecrets = {new Secret("super-secret".Sha256())},
-                    AllowedScopes = {"scope.qapita.qfund.api"}
+                    AllowedScopes = {"scope.qapita.qfund.api"},
+                    AccessTokenLifetime = 10800,
                 }
             };
     }
