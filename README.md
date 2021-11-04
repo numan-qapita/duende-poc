@@ -3,6 +3,7 @@ Duende PoC for custom stuff:
  * Custom GrantType
  * Custom Claims per client
  * MySql for storage
+ * Increased Token expiry to 3 hours (10800 s)
 
 Setup a local docker container for MySql to talk to:
 ```
